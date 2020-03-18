@@ -3,7 +3,7 @@ package com.example.mvvmdemo.model;
 import java.util.Observable;
 
 public class Model extends Observable {
-     private String input;
+     private String input = "";
 
     public void setInput(String input){
         this.input = input;
