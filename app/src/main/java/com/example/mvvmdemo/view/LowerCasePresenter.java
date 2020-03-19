@@ -6,10 +6,10 @@ import com.example.mvvmdemo.model.Model;
 import java.util.Observable;
 import java.util.Observer;
 
-public class AndroidLowerCaseViewModel extends ViewModel {
+public class LowerCasePresenter extends Observable {
 
     private Model model = new Model();
-    private MutableLiveData<String> presentableInput  = new MutableLiveData<>();
+    private String presentableInput;
 
     private void observermodel(Model model){
         model.addObserver(new Observer() {
@@ -17,17 +17,20 @@ public class AndroidLowerCaseViewModel extends ViewModel {
             public void update(Observable o, Object arg) {
                 if (o instanceof Model){
                     String input = ((Model) o).getInput();
-                    presentableInput.setValue(getTransformedInput(input));
+                    presentableInput = getTransformedInput(input);
+
+                    LowerCasePresenter.super.setChanged();
+                    LowerCasePresenter.super.notifyObservers();
             }}
         });
     }
 
-    public AndroidLowerCaseViewModel(){
+    public LowerCasePresenter(){
         observermodel(model);
-        presentableInput.setValue(getTransformedInput(model.getInput()));
+        presentableInput = getTransformedInput(model.getInput());
     }
 
-    public MutableLiveData<String> getPresentableInput() {
+    public String getPresentableInput() {
         return presentableInput;
     }
 

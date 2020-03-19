@@ -6,43 +6,44 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
-
 import com.example.mvvmdemo.R;
+
+import java.util.Observable;
 
 public class AndroidView extends AppCompatActivity {
 
-    private AndroidLowerCaseViewModel lowerCaseViewModel;
+    private LowerCasePresenter lowerCasePresenter = new LowerCasePresenter();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         observerViewModel();
 
+        TextView editedText = findViewById(R.id.textView);
+        editedText.setText(lowerCasePresenter.getPresentableInput());
         EditText inputText = findViewById(R.id.editText);
-        inputText.setText(lowerCaseViewModel.getPresentableInput().getValue());
+        inputText.setText(lowerCasePresenter.getPresentableInput());
     }
 
     private void observerViewModel(){
-        lowerCaseViewModel = new ViewModelProvider(this).get(AndroidLowerCaseViewModel.class);
-
-        final androidx.lifecycle.Observer<String> stringObserver = new Observer<String>() {
+        lowerCasePresenter.addObserver(new java.util.Observer() {
             @Override
-            public void onChanged(String s) {
-                TextView editedText = findViewById(R.id.editText);
-                editedText.setText(s);
-            }};
-        lowerCaseViewModel.getPresentableInput().observe(this, stringObserver);
+            public void update(Observable o, Object arg) {
+                if (o instanceof LowerCasePresenter){
+                    String input = ((LowerCasePresenter) o).getPresentableInput();
+                    TextView editedText = findViewById(R.id.textView);
+                    editedText.setText(input);
+            }
+        }});
         }
+
 
     public void setInput(View view){
         EditText inputText = findViewById(R.id.editText);
 
         String input = inputText.getText().toString();
-        lowerCaseViewModel.setInput(input);
+        lowerCasePresenter.setInput(input);
     }
 
 
