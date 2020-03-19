@@ -16,7 +16,7 @@ import java.util.Observable;
 
 public class AndroidView extends AppCompatActivity {
 
-    //private Model model = new Model();
+    //private Model model = new Model(); opgave 4
     private AndroidLowerCaseViewModel lowerCaseViewModel;
 
     @Override
@@ -26,12 +26,11 @@ public class AndroidView extends AppCompatActivity {
 
         observerViewModel();
 
-//        TextView editedText = (TextView) findViewById(R.id.textView);
-//        editedText.setText(model.getInput());
+//        TextView editedText = (TextView) findViewById(R.id.textView); Opgave 4
+//        editedText.setText(model.getInput()); Opgave 4
 
         EditText inputText = findViewById(R.id.editText);
         inputText.setText(lowerCaseViewModel.getPresentableInput().getValue());
-
     }
 
     private void observerViewModel(){
@@ -42,12 +41,17 @@ public class AndroidView extends AppCompatActivity {
             public void onChanged(String s) {
                 TextView editedText = findViewById(R.id.editText);
                 editedText.setText(s);
-            }
-        };
+            }};
         lowerCaseViewModel.getPresentableInput().observe(this, stringObserver);
         }
 
-//    private void observerModel(Model model){
+    public void setInput(View view){
+        EditText inputText = (EditText) findViewById(R.id.editText);
+
+        String input = inputText.getText().toString();
+        lowerCaseViewModel.setInput(input);
+    }
+    //    private void observerModel(Model model){
 //        model.addObserver(new Observer() {
 //        @Override
 //        public void update(Observable o, Object arg) {
@@ -59,11 +63,4 @@ public class AndroidView extends AppCompatActivity {
 //        }
 //    });}
 
-    public void setInput(View view){
-        EditText inputText = (EditText) findViewById(R.id.editText);
-
-        String input = inputText.getText().toString();
-        lowerCaseViewModel.setInput(input);
-
-    }
 }
